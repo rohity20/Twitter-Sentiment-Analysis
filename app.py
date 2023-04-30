@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 
 import joblib
-pipe_lr = joblib.load(open("emotion_classifier_pipe_lr.pkl","rb"))
+pipe_lr = joblib.load(open("emotion_classifier.pkl","rb"))
 
 def predict_emotions(docx):
     results = pipe_lr.predict([docx])
@@ -22,7 +22,7 @@ def main():
     choice = st.sidebar.selectbox("Menu", menu)
     
     if choice == "Home":
-        st.subheader("Home-Emotion In Text")
+        st.subheader("Text Emotion Detection")
         with st.form(key='emotion_clf_form'):
             raw_text = st.text_area("Type Here")
             submit_text = st.form_submit_button(label='Submit')
@@ -42,9 +42,9 @@ def main():
                 
             with col2:
                 st.success("Prediction Probability")
-                st.write(probability)
+                # st.write(probability)
                 proba_df = pd.DataFrame(probability, columns=pipe_lr.classes_)
-                st.write(proba_df.T)
+                # st.write(proba_df.T)
                 proba_df_clean = proba_df.T.reset_index()
                 proba_df_clean.columns = ["emotions","probability"]
                 fig = alt.Chart(proba_df_clean).mark_bar().encode(x='emotions',y='probability',color='emotions')
